@@ -83,7 +83,7 @@ export function SearchStructure({ navigation }: any) {
             {nationality && <MaterialIcons name="done" size={18} color={colors.blueSecondary} />}
           </InputCheckBox>
 
-          <InputCheckBoxLabel>Mesmo país</InputCheckBoxLabel>
+          <InputCheckBoxLabel>Mesmo país de domicílio</InputCheckBoxLabel>
         </InputCheckBoxContainer>
       </InputContainer>
       <FeedContainer>

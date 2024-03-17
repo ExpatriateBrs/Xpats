@@ -247,7 +247,7 @@ function ProfileStructure({ navigation }: any) {
                 <ValueText>{state.phoneNumber}</ValueText>
               </LabelContainer>
               <LabelContainer>
-                <LabelText>País:</LabelText>
+                <LabelText>Domicílio:</LabelText>
                 <ValueText>{state.country}</ValueText>
               </LabelContainer>
               <LabelContainer>
@@ -303,7 +303,7 @@ function ProfileStructure({ navigation }: any) {
                 <CountryContainer  >
 
                   <InputCountry
-                    placeholder="País"
+                    placeholder="País de Domicílio"
                     onChangeText={(text: string) => {
                       setCountryInput(text)
                     }}

@@ -1,18 +1,15 @@
 import React from "react";
 import {
-  CellphoneTitle,
-  CountryTitle,
   DataContainer,
   DescripitionText,
   DescriptionContainer,
   ImageContainer,
   LabelContainer,
   LabelText,
-  NameEditContainer,
-  NameTitle,
   ServiceBadge,
   ServiceBadgeContainer,
   ServicesBadgesContainer,
+  ValueText,
   WhatsappArea,
   WhatsappButton,
   WhatsappNumber,
@@ -40,22 +37,19 @@ function UserContainerData({ state }: any) {
 
         <UserImageArea user={state} />
       </ImageContainer>
-
       <LabelContainer>
         <LabelText>Nome:</LabelText>
+        <ValueText>{state.displayName}</ValueText>
       </LabelContainer>
-      <NameEditContainer>
 
-        <NameTitle>{state.displayName}</NameTitle>
-      </NameEditContainer>
       <LabelContainer>
         <LabelText>Telefone:</LabelText>
+        <ValueText>{state.phoneNumber}</ValueText>
       </LabelContainer>
-      <CellphoneTitle>{state.phoneNumber}</CellphoneTitle>
       <LabelContainer>
-        <LabelText>País:</LabelText>
+        <LabelText>Domicílio:</LabelText>
+        <ValueText>{state.country}</ValueText>
       </LabelContainer>
-      <CountryTitle>{state.country}</CountryTitle>
       <LabelContainer>
         <LabelText>Serviços:</LabelText>
       </LabelContainer>

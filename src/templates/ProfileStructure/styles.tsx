@@ -83,7 +83,7 @@ export const ServicesBadgesContainer = styled.View`
 `
 export const ServiceBadgeContainer = styled.View`
     background-color: ${colors.bluePrimary};
-    width: 20%;
+    width: 40%;
     margin: ${heightPercentageToDP('1%')}px;
     border-radius: 10px;
 
