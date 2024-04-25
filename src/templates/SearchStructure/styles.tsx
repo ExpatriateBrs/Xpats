@@ -67,3 +67,36 @@ export const BannerContainer = styled.View`
     padding: 0 10px;
     min-height: ${heightPercentageToDP('5%')}px;
 `
+
+export const DropdownInputCategory = styled.View`
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: ${colors.whitePrimary};
+    border-radius: 10px;
+    flex-direction: row;
+    position: relative;
+    margin: ${heightPercentageToDP('2%')}px 0;
+    padding: 0 10px;
+    flex-direction: column;
+    
+`
+
+export const DropdownInputCategoryLabel = styled.Text`
+    font-size: ${scaledSize(14)}px;
+    color: ${colors.bluePrimary};
+    font-weight: 400;
+    font-family: ${fontsFamily.mono};
+    margin-top: ${heightPercentageToDP('1%')}px;
+
+`
+export const CleanDropdownButton = styled.TouchableOpacity`
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    margin-top: ${heightPercentageToDP('1%')}px;
+
+    padding-bottom: ${heightPercentageToDP('1%')}px;
+    background-color: ${colors.yellowPrimary};
+    border-radius: 20px;
+`

@@ -33,5 +33,7 @@ export interface UserModel {
     description: string;
     isProfessional: boolean;
     id: string;
+    city?: string;
+    category?: string;
 
 }

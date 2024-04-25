@@ -47,8 +47,16 @@ function UserContainerData({ state }: any) {
         <ValueText>{state.phoneNumber}</ValueText>
       </LabelContainer>
       <LabelContainer>
-        <LabelText>Domicílio:</LabelText>
+        <LabelText>País:</LabelText>
         <ValueText>{state.country}</ValueText>
+      </LabelContainer>
+      <LabelContainer>
+        <LabelText>Domicílio:</LabelText>
+        <ValueText>{state.city}</ValueText>
+      </LabelContainer>
+      <LabelContainer>
+        <LabelText>Categoria:</LabelText>
+        <ValueText>{state.category}</ValueText>
       </LabelContainer>
       <LabelContainer>
         <LabelText>Serviços:</LabelText>

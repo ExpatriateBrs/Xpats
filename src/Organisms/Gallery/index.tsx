@@ -27,6 +27,8 @@ export const Gallery = ({ items, navigation, maxHeight }: any) => {
           user={item}
           key={`${item.id}`}
           navigation={navigation}
+          city={item.city}
+          category={item.category}
         />
       )}
       contentContainerStyle={styles.itemContainer}

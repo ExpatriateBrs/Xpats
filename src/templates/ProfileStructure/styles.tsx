@@ -180,7 +180,7 @@ export const CountriesListContainer = styled.ScrollView`
     padding: ${heightPercentageToDP('2%')}px ${widthPercentageToDP('2%')}px;
     padding-top: 0px;
     position: absolute;
-    top: 70px;
+    top: 160px;
     bottom: 120px;
     margin-bottom: 70px;
     z-index: 999;
@@ -367,6 +367,33 @@ export const ExitText = styled.Text`
     font-size: ${scaledSize(16)}px;
     font-weight: bold;
     color: ${colors.bluePrimary};
+    margin-right: 10px;
+    font-family: ${fontsFamily.mono};
+`;
+
+
+export const LinkGetLocation = styled.TouchableOpacity`
+   /* width: ${widthPercentageToDP('80%')}px;
+    height: 50px;
+    border-radius: 100px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row; */
+    width: ${widthPercentageToDP('60%')}px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: ${colors.bluePrimary};
+    padding: 10px;
+    margin: 20px 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+`;
+
+export const GetLocationText = styled.Text`
+    font-size: ${scaledSize(16)}px;
+    font-weight: bold;
+    color: ${colors.blueSecondary};
     margin-right: 10px;
     font-family: ${fontsFamily.mono};
 `;

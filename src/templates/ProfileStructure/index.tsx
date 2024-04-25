@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   ButtonSave,
   ButtonSaveContainer,
@@ -20,6 +20,7 @@ import {
   ExitButton,
   ExitButtonContainer,
   ExitText,
+  GetLocationText,
   ImageContainer,
   ImageProfile,
   InputCellphone,
@@ -27,6 +28,7 @@ import {
   InputName,
   LabelContainer,
   LabelText,
+  LinkGetLocation,
   NameEditContainer,
   SaveText,
   SectionSeparator,
@@ -52,25 +54,15 @@ import { UserModel } from "../../stores/User/types";
 import { getCountries, getLocalCountries } from "../../services/getCountries";
 import * as ImageManipulator from 'expo-image-manipulator';
 import { Banner } from "../../Molecules/BannerContainer";
-
-const COUNTRIES = ['Brasil', 'Argentina', 'Chile', 'Colombia', 'Uruguai', 'Paraguai']
-
-const suggestions = COUNTRIES.map(country => {
-  return {
-    id: country,
-    text: country
-  };
-});
-
-const KeyCodes = {
-  comma: 188,
-  enter: 13
-};
-
-const delimiters = [KeyCodes.comma, KeyCodes.enter];
+import * as Location from 'expo-location'
+import Geocoder from 'react-native-geocoding';
+import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { getLocalCategories } from "../../services/getCategories";
+import { ActivityIndicator } from "react-native-paper";
+import "core-js/stable/atob";
+import { JWTTokenType } from "./types";
 
 function ProfileStructure({ navigation }: any) {
-  const services = ['servico 1', 'servico 2', 'servico 3', 'servico 1', 'servico 2', 'servico 3', 'servico 1', 'servico 2', 'servico 3']
   const [disabledButtons, setDisabledButtons] = React.useState(false);
 
   const { user, setUser } = useUser(state => state)
@@ -86,15 +78,18 @@ function ProfileStructure({ navigation }: any) {
     email: user.email || "",
     uid: user.uid || "",
     id: user.id || "",
+    city: user.city || '',
+    category: user.category || ''
   });
 
   const [isEditing, setIsEditing] = useState(false);
-  const [searchingCountry, setSearchingCountry] = useState(false);
+  const [searchingCategory, setSearchingCategory] = useState(false);
   const [servicesAutoFocus, setServicesAutoFocus] = useState(false);
   const [servicesList, setServicesList] = useState<string[]>(user.services || state.services || []);
   const [serviceInput, setServiceInput] = useState<string>('');
-  const [countryInput, setCountryInput] = useState<string>(state.country);
+  const [categoryInput, setCategoryInput] = useState<string>(state.category);
   const [countruiesList, setCountriesList] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const setServices =
     (settingFocus: boolean = true) => {
@@ -155,9 +150,9 @@ function ProfileStructure({ navigation }: any) {
     }
   }
 
-  const getCountrySearched = (country: string) => {
-    if (!!country.length && country !== ' - ') {
-      let countries = getLocalCountries(country);
+  const getCategorySearched = (category: string) => {
+    if (!!category.length && category !== ' - ') {
+      let countries = getLocalCategories(category);
       setCountriesList(countries)
     }
 
@@ -183,10 +178,82 @@ function ProfileStructure({ navigation }: any) {
       email: user.email || "",
       uid: user.uid || "",
       id: user.id || "",
+      city: user.city || '',
+      category: user.category || ''
     })
     setServicesList(user.services || state.services || [])
     setIsEditing(false)
   }
+
+  const onViewDetailsInvoicesState = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+  }
+
+  async function getPosition(): Promise<any> {
+
+    return new Promise((resolve, reject) => {
+
+      onViewDetailsInvoicesState().then(() => {
+
+        Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest }).then((position) => {
+          const latitude = position.coords.latitude
+          const longitude = position.coords.longitude
+          let key = ''
+          try {
+            const keyEncoded = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJBSXphU3lBcS1fT0xaUTUyLWpURDlmYTNEQm9SaFd1YWxYb1RVZEUiLCJpYXQiOjE3MTIyNDU5ODN9.W66amtSAcl3xpIc4V_8zFkQa_gKQuijLzXSqvYnQ9aQ'
+            const keyObjectDecoded = jwtDecode<JWTTokenType>(keyEncoded)
+            key = keyObjectDecoded.key
+
+
+          } catch (e) {
+            console.log('error decode', e)
+          }
+
+          Geocoder.init(key);
+
+          Geocoder.from({
+            lat: latitude,
+            lng: longitude
+          })
+            .then(json => {
+              var compoundCode = json['plus_code']['compound_code'];
+              const cityDatas = compoundCode.split(',')[0].split(' ');
+              let city = ''
+              cityDatas.forEach((i, idx) => {
+                if (idx !== 0) {
+                  city += i + ' '
+                }
+              })
+              const country = compoundCode.split(',')[2].split(' ')[1];
+              setState({ ...state, country, city })
+
+            })
+            .catch(error => {
+              console.log('error loc 1', error)
+
+            }
+            );
+          return resolve(position);
+        }).catch((error) => {
+          console.log('error loc 2', error)
+          return reject(error);
+        }
+        )
+
+        setIsLoading(false)
+
+      })
+    })
+  }
+
+  useEffect(() => {
+    getPosition().then((position) => {
+      console.log('position', position)
+    }
+    ).catch((error) => {
+      console.log('error', error)
+    });
+  }, []);
 
   useEffect(() => {
     if (!!state.photoURL && user.photoURL !== state.photoURL) {
@@ -208,15 +275,17 @@ function ProfileStructure({ navigation }: any) {
       email: user.email || "",
       uid: user.uid || "",
       id: user.id || "",
+      city: user.city || '',
+      category: user.category || ''
     })
-    setCountryInput(user.country || "")
+    setCategoryInput(user.category || "")
     setServicesList(user.services || [])
   }, [user])
 
 
   useEffect(() => {
-    getCountrySearched(countryInput)
-  }, [countryInput])
+    getCategorySearched(categoryInput)
+  }, [categoryInput])
 
 
   return (
@@ -247,8 +316,16 @@ function ProfileStructure({ navigation }: any) {
                 <ValueText>{state.phoneNumber}</ValueText>
               </LabelContainer>
               <LabelContainer>
-                <LabelText>Domicílio:</LabelText>
+                <LabelText>País:</LabelText>
                 <ValueText>{state.country}</ValueText>
+              </LabelContainer>
+              <LabelContainer>
+                <LabelText>Domicílio:</LabelText>
+                <ValueText>{state.city}</ValueText>
+              </LabelContainer>
+              <LabelContainer>
+                <LabelText>Categoria:</LabelText>
+                <ValueText>{state.category}</ValueText>
               </LabelContainer>
               <LabelContainer>
                 <LabelText>Serviços:</LabelText>
@@ -302,37 +379,65 @@ function ProfileStructure({ navigation }: any) {
 
                 <CountryContainer  >
 
+                  <LabelContainer>
+                    <LabelText>País:</LabelText>
+                    <ValueText>{state.country}</ValueText>
+                  </LabelContainer>
+                  <LabelContainer>
+                    <LabelText>Domicílio:</LabelText>
+                    <ValueText>{state.city}</ValueText>
+                  </LabelContainer>
+
+                  {!isLoading ? <LinkGetLocation onPress={() => {
+                    setIsLoading(true)
+                    getPosition()
+                      .then((position) => { })
+                      .catch((error) => {
+                        console.log('error', error)
+                      }
+                      )
+                  }}>
+
+                    <GetLocationText>Obter localização</GetLocationText>
+                    <MaterialCommunityIcons name="target" size={24} color={colors.blueSecondary} />
+                  </LinkGetLocation>
+                    :
+                    <ActivityIndicator size="small" color={colors.bluePrimary} />
+                  }
+
+
+
                   <InputCountry
-                    placeholder="País de Domicílio"
+                    placeholder="Categoria"
                     onChangeText={(text: string) => {
-                      setCountryInput(text)
+                      setCategoryInput(text)
                     }}
-                    value={countryInput === ' - ' ? '' : countryInput}
+                    value={categoryInput === ' - ' ? '' : categoryInput}
                     onFocus={() => {
-                      setSearchingCountry(true)
+                      setSearchingCategory(true)
                       disableButtons()
                     }}
                     onBlur={() => {
-                      if (countruiesList.find(country => country.toLowerCase() === countryInput.toLowerCase())) {
-                        setState({ ...state, country: countryInput });
-                        setSearchingCountry(false)
+                      if (countruiesList.find(country => country.toLowerCase() === categoryInput.toLowerCase())) {
+                        setState({ ...state, category: categoryInput });
+                        setSearchingCategory(false)
                       }
                       enableButtons()
                     }}
                   />
 
-                  {searchingCountry && countryInput && countryInput !== " - " ?
+                  {searchingCategory && categoryInput && categoryInput !== " - " ?
                     <CountriesListContainer
                       key={countruiesList.length}
                     >
                       {countruiesList?.map((country, index) => {
                         console.log('country item', country)
                         return <CountryButtonSelect onPress={() => {
-                          setState({ ...state, country: country });
+                          setState({ ...state, category: country });
 
-                          setCountryInput(country)
+                          setCategoryInput(country)
                           console.log('country', country)
-                          setSearchingCountry(false)
+                          setSearchingCategory(false)
                         }} >
                           <CountryItem >{country}</CountryItem>
                         </CountryButtonSelect>

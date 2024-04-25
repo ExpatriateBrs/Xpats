@@ -8,6 +8,8 @@ export interface ProfessionalItemCardProps {
     services: string[]
     country: string
     navigation: any
+    city: string
+    category: string
 }
 
 export interface SectionProps {

@@ -98,9 +98,9 @@ export const SectionSeparator = styled.View`
     margin-bottom: ${heightPercentageToDP('0.5%')}px;
 `
 
-export const DataContainer = styled.View`
+export const DataContainer = styled.ScrollView`
     flex-direction: column;
-    align-items: center;
+    padding: 0 40px;
     height: ${heightPercentageToDP('100%')}px;
 `
 
@@ -311,7 +311,7 @@ export const LabelContainer = styled.View`
     justify-content: center;
     align-items: center;
     margin-top: ${heightPercentageToDP('3%')}px;
-    width: ${widthPercentageToDP('70%')}px;
+    width: ${widthPercentageToDP('72%')}px;
     text-align: center;
     position: relative;
 `;
@@ -339,7 +339,7 @@ export const LabelText = styled.Text`
 `;
 export const ValueText = styled.Text`
     position: absolute;
-    left: ${widthPercentageToDP('25%')}px;
+    left: ${widthPercentageToDP('27%')}px;
     font-size: ${scaledSize(14)}px;
     font-weight: bold;
     color: ${colors.greenPrimary};

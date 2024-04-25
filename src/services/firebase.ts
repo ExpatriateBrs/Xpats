@@ -21,8 +21,6 @@ export const getUserByDB = async () => {
     const querySnapshot = await getDocs(collection(db, "users"));
     console.log('querySnapshot.docs', querySnapshot.docs[0].data())
     const userByDb = querySnapshot.docs?.find((doc) => doc.data().uid === user.uid);
-    console.log('userByDb', userByDb?.data())
-    console.log('userByDb?.data()', userByDb?.data().id)
     setUid(userByDb?.data().uid)
     setUser(userByDb?.data())
   }
