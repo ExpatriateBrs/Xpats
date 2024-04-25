@@ -100,7 +100,7 @@ export const SectionSeparator = styled.View`
 
 export const DataContainer = styled.ScrollView`
     flex-direction: column;
-    padding: 0 40px;
+    padding: 0 5%;
     height: ${heightPercentageToDP('100%')}px;
 `
 
@@ -327,7 +327,7 @@ export const LabelAloneContainer = styled.View`
 
 export const LabelText = styled.Text`
     position: absolute;
-    right: ${widthPercentageToDP('45%')}px;
+    right: ${widthPercentageToDP('40%')}px;
     font-size: ${scaledSize(16)}px;
     font-weight: bold;
     color: ${colors.blackPrimary};
@@ -339,7 +339,7 @@ export const LabelText = styled.Text`
 `;
 export const ValueText = styled.Text`
     position: absolute;
-    left: ${widthPercentageToDP('27%')}px;
+    left: ${widthPercentageToDP('30%')}px;
     font-size: ${scaledSize(14)}px;
     font-weight: bold;
     color: ${colors.greenPrimary};

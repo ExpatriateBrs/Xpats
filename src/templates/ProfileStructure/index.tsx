@@ -7,10 +7,7 @@ import {
   CancelText,
   CheckBoxContainer,
   ContentContainer,
-  CountriesListContainer,
-  CountryButtonSelect,
   CountryContainer,
-  CountryItem,
   DataContainer,
   DescripitionInput,
   DescripitionText,
@@ -24,7 +21,6 @@ import {
   ImageContainer,
   ImageProfile,
   InputCellphone,
-  InputCountry,
   InputName,
   LabelContainer,
   LabelText,
@@ -51,16 +47,16 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import { setPhotoURL } from "../../functions/setPhoto";
 import { UserModel } from "../../stores/User/types";
-import { getCountries, getLocalCountries } from "../../services/getCountries";
 import * as ImageManipulator from 'expo-image-manipulator';
 import { Banner } from "../../Molecules/BannerContainer";
 import * as Location from 'expo-location'
 import Geocoder from 'react-native-geocoding';
-import { JwtPayload, jwtDecode } from 'jwt-decode';
-import { getLocalCategories } from "../../services/getCategories";
+import { jwtDecode } from 'jwt-decode';
 import { ActivityIndicator } from "react-native-paper";
 import "core-js/stable/atob";
 import { JWTTokenType } from "./types";
+import { CategoriesDropdown } from "../../Molecules/CategoriesDropdown";
+import { categoriesFormatted } from "../../categories";
 
 function ProfileStructure({ navigation }: any) {
   const [disabledButtons, setDisabledButtons] = React.useState(false);
@@ -90,6 +86,7 @@ function ProfileStructure({ navigation }: any) {
   const [categoryInput, setCategoryInput] = useState<string>(state.category);
   const [countruiesList, setCountriesList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFocus, setIsFocus] = React.useState<boolean>(false);
 
   const setServices =
     (settingFocus: boolean = true) => {
@@ -139,6 +136,7 @@ function ProfileStructure({ navigation }: any) {
   const saveUser = async () => {
     try {
 
+      console.log('state', state.category)
       const docRef = await updateDoc(doc(db, "users", user.id), state);
       console.log("Document updated with ID: ", docRef);
       setUser(state)
@@ -152,7 +150,8 @@ function ProfileStructure({ navigation }: any) {
 
   const getCategorySearched = (category: string) => {
     if (!!category.length && category !== ' - ') {
-      let countries = getLocalCategories(category);
+      let countries = categoriesFormatted//getLocalCategories(category);
+      console.log('countries', countries)
       setCountriesList(countries)
     }
 
@@ -283,9 +282,6 @@ function ProfileStructure({ navigation }: any) {
   }, [user])
 
 
-  useEffect(() => {
-    getCategorySearched(categoryInput)
-  }, [categoryInput])
 
 
   return (
@@ -407,102 +403,71 @@ function ProfileStructure({ navigation }: any) {
 
 
 
-                  <InputCountry
-                    placeholder="Categoria"
-                    onChangeText={(text: string) => {
-                      setCategoryInput(text)
-                    }}
-                    value={categoryInput === ' - ' ? '' : categoryInput}
-                    onFocus={() => {
-                      setSearchingCategory(true)
-                      disableButtons()
-                    }}
-                    onBlur={() => {
-                      if (countruiesList.find(country => country.toLowerCase() === categoryInput.toLowerCase())) {
-                        setState({ ...state, category: categoryInput });
-                        setSearchingCategory(false)
-                      }
-                      enableButtons()
-                    }}
+                  <CategoriesDropdown setIsFocus={setIsFocus} setCategory={setCategoryInput} isFocus={isFocus} data={categoriesFormatted} value={categoryInput} onChange={(value) => {
+                    setState({ ...state, category: value });
+                  }}
+                    customStyle={{ width: '80%', backgroundColor: colors.graySecondary, color: colors.blackPrimary, borderWidth: 0 }}
+                    placeholderStyle={{ color: colors.blackPrimary }}
+                    selectedTextStyle={{ color: colors.blackPrimary }}
                   />
+                  <>
+                    <ServicesMultiValueInput
+                      key={servicesList.length}
+                      placeholder="Serviços"
+                      onChangeText={(text: string) => setServiceInput(text)}
+                      value={serviceInput}
+                      onSubmitEditing={() => setServices()}
+                      onBlur={() => {
+                        setServices(false);
+                        enableButtons()
+                      }}
+                      onFocus={disableButtons}
+                      autoFocus={servicesAutoFocus}
+                    />
 
-                  {searchingCategory && categoryInput && categoryInput !== " - " ?
-                    <CountriesListContainer
-                      key={countruiesList.length}
-                    >
-                      {countruiesList?.map((country, index) => {
-                        console.log('country item', country)
-                        return <CountryButtonSelect onPress={() => {
-                          setState({ ...state, category: country });
-
-                          setCategoryInput(country)
-                          console.log('country', country)
-                          setSearchingCategory(false)
-                        }} >
-                          <CountryItem >{country}</CountryItem>
-                        </CountryButtonSelect>
+                    <ServicesBadgesContainer>
+                      {servicesList.map((service, index) => {
+                        return <ServiceBadgeInput key={index}
+                          onPress={() => onRemoveService(service)
+                          }
+                        >
+                          <ServiceBadgeInputText>
+                            {service}
+                          </ServiceBadgeInputText>
+                          <SimpleLineIcons name="close" size={18} color={colors.blueSecondary} />
+                        </ServiceBadgeInput>
                       })}
-                    </CountriesListContainer>
-                    :
-                    (
-                      <>
-                        <ServicesMultiValueInput
-                          key={servicesList.length}
-                          placeholder="Serviços"
-                          onChangeText={(text: string) => setServiceInput(text)}
-                          value={serviceInput}
-                          onSubmitEditing={() => setServices()}
-                          onBlur={() => {
-                            setServices(false);
-                            enableButtons()
-                          }}
-                          onFocus={disableButtons}
-                          autoFocus={servicesAutoFocus}
-                        />
+                    </ServicesBadgesContainer>
 
-                        <ServicesBadgesContainer>
-                          {servicesList.map((service, index) => {
-                            return <ServiceBadgeInput key={index}
-                              onPress={() => onRemoveService(service)
-                              }
-                            >
-                              <ServiceBadgeInputText>
-                                {service}
-                              </ServiceBadgeInputText>
-                              <SimpleLineIcons name="close" size={18} color={colors.blueSecondary} />
-                            </ServiceBadgeInput>
-                          })}
-                        </ServicesBadgesContainer>
+                    <DescripitionInput
+                      placeholder="Descrição"
+                      onChangeText={(text: string) => setState({ ...state, description: text })}
+                      value={state.description === ' - ' ? '' : state.description}
+                      multiline
+                      onFocus={disableButtons}
+                      onBlur={enableButtons}
 
-                        <DescripitionInput
-                          placeholder="Descrição"
-                          onChangeText={(text: string) => setState({ ...state, description: text })}
-                          value={state.description === ' - ' ? '' : state.description}
-                          multiline
-                          onFocus={disableButtons}
-                          onBlur={enableButtons}
+                    />
 
-                        />
+                    <CheckBoxContainer>
 
-                        <CheckBoxContainer>
+                      <CheckboxArea isSelected={state.isProfessional} onPress={() => setState({ ...state, isProfessional: !state.isProfessional })} labelContent="Sou um prestador de serviço" />
+                    </CheckBoxContainer>
 
-                          <CheckboxArea isSelected={state.isProfessional} onPress={() => setState({ ...state, isProfessional: !state.isProfessional })} labelContent="Sou um prestador de serviço" />
-                        </CheckBoxContainer>
-
-                        <ButtonSaveContainer>
-                          <CancelButton onPress={resetState} disabled={disabledButtons} >
-                            <CancelText>Cancelar</CancelText>
-                            <MaterialIcons name="cancel" size={24} color={colors.bluePrimary} />
-                          </CancelButton>
-                          <ButtonSave onPress={saveUser} disabled={disabledButtons}>
-                            <SaveText>Salvar</SaveText>
-                            <MaterialIcons name="save" size={24} color={colors.yellowPrimary} />
-                          </ButtonSave>
-                        </ButtonSaveContainer>
+                    <ButtonSaveContainer>
+                      <CancelButton onPress={resetState} disabled={disabledButtons} >
+                        <CancelText>Cancelar</CancelText>
+                        <MaterialIcons name="cancel" size={24} color={colors.bluePrimary} />
+                      </CancelButton>
+                      <ButtonSave onPress={saveUser} disabled={disabledButtons}>
+                        <SaveText>Salvar</SaveText>
+                        <MaterialIcons name="save" size={24} color={colors.yellowPrimary} />
+                      </ButtonSave>
+                    </ButtonSaveContainer>
 
 
-                      </>
-                    )}
+                  </>
+
                 </CountryContainer>
               </DataContainer>
             )}

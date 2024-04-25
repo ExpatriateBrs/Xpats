@@ -79,5 +79,4 @@ export const CenterText = styled.Text`
   color: ${colors.blackPrimary};
   font-family: ${fontsFamily.mono};
   font-size: 14px;
-  /* margin-right: 5px; */
 `

@@ -18,7 +18,8 @@ export const categories = [
     "Contabilidade e administração",
     "Vistos e documentação",
     "Atendimento ao publico (garçon, secretária, vendedor)",
-    "Vestuário"
+    "Vestuário",
+    "Outros"
 ]
 
 export const categoriesFormatted = [
@@ -121,5 +122,10 @@ export const categoriesFormatted = [
         label: "Vestuário",
         value: "Vestuário",
         search: "Vestuário"
+    },
+    {
+        label: "Outros",
+        value: "Outros",
+        search: "Outros"
     }
 ]

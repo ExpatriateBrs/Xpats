@@ -22,6 +22,7 @@ import { MaxAdContentRating, MobileAds } from "react-native-google-mobile-ads";
 import { StyleSheet, TextInput } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown'
 import { categoriesFormatted } from "../../categories";
+import { CategoriesDropdown } from "../../Molecules/CategoriesDropdown";
 
 export function SearchStructure({ navigation }: any) {
   const { users } = useUser((state) => state);
@@ -90,32 +91,8 @@ export function SearchStructure({ navigation }: any) {
         <Banner />
         <GenericInput placeholder="Buscar" onChangeText={(e: string) => setSearch(e)} value={search} />
         <DropdownInputCategory>
-          <Dropdown
-            style={[styles.dropdown
-            ]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={categoriesFormatted}
-            autoScroll
-            search
-            maxHeight={300}
-            minHeight={100}
-            labelField="label"
-            valueField="value"
-            searchField="search"
-            placeholder={!isFocus ? 'Categoria' : '...'}
-            searchPlaceholder="Buscar..."
-            value={category}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setCategory(item.value);
-              setIsFocus(false);
-            }}
-
-          />
+          
+          <CategoriesDropdown setIsFocus={setIsFocus} setCategory={setCategory} isFocus={isFocus} data={categoriesFormatted} value={category} />
           <CleanDropdownButton onPress={() => {
             setCategory('')
           }}>

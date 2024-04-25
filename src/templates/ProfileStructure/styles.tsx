@@ -397,3 +397,13 @@ export const GetLocationText = styled.Text`
     margin-right: 10px;
     font-family: ${fontsFamily.mono};
 `;
+
+export const DropdownView = styled.View`
+    width: 80%;
+    height: 50px;
+    border-radius: 10px;
+    background-color: ${colors.graySecondary};
+    padding: 10px;
+    margin-top: 10px;
+    font-family: ${fontsFamily.mono};
+`;

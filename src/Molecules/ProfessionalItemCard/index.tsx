@@ -41,34 +41,13 @@ export const ProfessionalItemCard = ({
       <View>
         <View>
           <UserImageArea user={user} />
-          {/* {city && <Center
-            bg={colors.yellowPrimary}
-            position="absolute"
-            bottom="5"
-            px="5"
-            py="0.8"
-            fontFamily={'mono'}
-          > */}
-            {/* {city && (city.split(' ').length > 1 ? city.split(' ').map((word, index) => {
-              if (index < 3) {
-                return word[0].toUpperCase()
-              }
-
-              return ''
-
-
-            }).join('') : city?.slice(0, 3)).toUpperCase() + ' - '}{country.slice(0, 2).toUpperCase()} */}
-            {/* {getEllipsisText(city?.toUpperCase(), 12)}
-          </Center>} */}
+          
           {city && <CenterCustom>
             <CenterText>
-              {getEllipsisText((city ||  "")?.toUpperCase(), 12)}
+              {getEllipsisText((city ||  "")?.toUpperCase(), 9)}
 
             </CenterText>
-            {/* <CenterText>
-            {country.slice(0, 2).toUpperCase()}
-
-            </CenterText> */}
+            
           </CenterCustom>}
           <Center
             bg={colors.yellowPrimary}
@@ -103,7 +82,7 @@ export const ProfessionalItemCard = ({
           </Stack>
           <Section>
             <DescriptionText>
-              {getEllipsisText(description, 60)}
+              {getEllipsisText(description, 45)}
             </DescriptionText>
           </Section>
         </Stack>
