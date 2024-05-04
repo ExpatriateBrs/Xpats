@@ -32,11 +32,9 @@ export function MyTabBar({ navigation, initialScreen = 0 }: MyTabBarProps) {
     console.log('interstitialAd pre evento', interstitialAd)
     interstitialAd.addAdEventListener(AdEventType.LOADED, () => {
       setInterstitialAds(interstitialAd)
-      console.warn('interstitialAd loaded')
     }
     )
     interstitialAd.addAdEventListener(AdEventType.CLOSED, () => {
-      console.warn('interstitialAd loaded')
     }
     )
     interstitialAd.load()

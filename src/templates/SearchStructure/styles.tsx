@@ -91,12 +91,12 @@ export const DropdownInputCategoryLabel = styled.Text`
 
 `
 export const CleanDropdownButton = styled.TouchableOpacity`
-    width: 50%;
+    width: 70%;
     justify-content: center;
     align-items: center;
     margin-top: ${heightPercentageToDP('1%')}px;
 
     padding-bottom: ${heightPercentageToDP('1%')}px;
     background-color: ${colors.yellowPrimary};
-    border-radius: 20px;
+    border-radius: 10px;
 `

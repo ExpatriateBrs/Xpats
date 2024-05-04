@@ -102,7 +102,7 @@ export function SearchStructure({ navigation }: any) {
         </DropdownInputCategory>
         <InputCheckBoxContainer onPress={() => {
           if (!!nationality) setNationality("")
-          else setNationality(user.country)
+          else setNationality(user?.city || '')
         }}>
           <InputCheckBox isSelected={nationality}  >
             {nationality && <MaterialIcons name="done" size={18} color={colors.blueSecondary} />}
