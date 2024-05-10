@@ -19,7 +19,6 @@ export const getAllProfessionalsUsers = async () => {
 export const getUserByDB = async () => {
     const {setUid, setUser, user} = useUser.getState()
     const querySnapshot = await getDocs(collection(db, "users"));
-    console.log('querySnapshot.docs', querySnapshot.docs[0].data())
     const userByDb = querySnapshot.docs?.find((doc) => doc.data().uid === user.uid);
     setUid(userByDb?.data().uid)
     setUser(userByDb?.data())

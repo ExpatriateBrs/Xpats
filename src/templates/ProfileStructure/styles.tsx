@@ -49,6 +49,11 @@ export const DataContainer = styled.View`
     align-items: center;
     height: ${heightPercentageToDP('100%')}px;
 `
+export const DataEditContainer = styled.View`
+    flex-direction: column;
+    align-items: center;
+    height: ${heightPercentageToDP('115%')}px;
+`
 
 export const NameEditContainer = styled.View`
     justify-content: center;

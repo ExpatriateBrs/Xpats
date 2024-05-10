@@ -36,7 +36,8 @@ export function SearchStructure({ navigation }: any) {
   const getFilter = () => {
     let usersAux = users.filter((userList, index) =>
     (userList.displayName.toLowerCase().includes(search.toLowerCase()) ||
-      userList.services.join().toLowerCase().includes(search.toLowerCase()))
+      userList.services.join().toLowerCase().includes(search.toLowerCase())
+      || userList.description.toLowerCase().includes(search.toLowerCase()))
     )
     if (!!nationality) usersAux = usersAux.filter(userList => userList?.city === nationality)
     usersAux = usersAux.filter((userList, index) => index < 10)

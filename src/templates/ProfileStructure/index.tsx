@@ -9,6 +9,7 @@ import {
   ContentContainer,
   CountryContainer,
   DataContainer,
+  DataEditContainer,
   DescripitionInput,
   DescripitionText,
   DescriptionContainer,
@@ -263,26 +264,25 @@ function ProfileStructure({ navigation }: any) {
     , [state.photoURL])
 
   useEffect(() => {
-    setState({
-      displayName: user.displayName || " - ",
-      phoneNumber: user.phoneNumber || " - ",
-      country: user.country || " - ",
-      description: user.description || " - ",
-      services: user.services || [],
-      isProfessional: user.isProfessional || false,
-      photoURL: user.photoURL || "",
-      email: user.email || "",
-      uid: user.uid || "",
-      id: user.id || "",
-      city: user.city || '',
-      category: user.category || ''
-    })
-    setCategoryInput(user.category || "")
-    setServicesList(user.services || [])
-  }, [user])
-
-
-
+    if (!isEditing) {
+      setState({
+        displayName: user.displayName || " - ",
+        phoneNumber: user.phoneNumber || " - ",
+        country: user.country || " - ",
+        description: user.description || " - ",
+        services: user.services || [],
+        isProfessional: user.isProfessional || false,
+        photoURL: user.photoURL || "",
+        email: user.email || "",
+        uid: user.uid || "",
+        id: user.id || "",
+        city: user.city || '',
+        category: user.category || ''
+      })
+      setCategoryInput(user.category || "")
+      setServicesList(user.services || [])
+    }
+  }, [user, state.displayName])
 
   return (
     <PageContainer>
@@ -327,7 +327,7 @@ function ProfileStructure({ navigation }: any) {
                 <LabelText>Serviços:</LabelText>
               </LabelContainer>
               <ServicesBadgesContainer>
-                {state.services.map((service, index) => {
+                {state.services?.map((service, index) => {
                   return <ServiceBadgeContainer>
 
                     <ServiceBadge key={index}>{service}</ServiceBadge>
@@ -355,7 +355,7 @@ function ProfileStructure({ navigation }: any) {
             </DataContainer>
             :
             (
-              <DataContainer>
+              <DataEditContainer>
                 <InputName
                   placeholder="Nome"
                   onChangeText={(text: string) => setState({ ...state, displayName: text })}
@@ -469,7 +469,7 @@ function ProfileStructure({ navigation }: any) {
                   </>
 
                 </CountryContainer>
-              </DataContainer>
+              </DataEditContainer>
             )}
         </ContentContainer>
       </>
