@@ -19,6 +19,9 @@ export const categories = [
     "Vistos e documentação",
     "Atendimento ao publico (garçon, secretária, vendedor)",
     "Vestuário",
+    "Terapias holísticas e espiritualidade",
+    "Fotografia e organização de eventos (buffet, cerimoninal)",
+    "Aluguel (apartamento, quarto, escritório)",
     "Outros"
 ]
 
@@ -122,6 +125,21 @@ export const categoriesFormatted = [
         label: "Vestuário",
         value: "Vestuário",
         search: "Vestuário"
+    },
+    {
+        label: "Terapias holísticas e espiritualidade",
+        value: "Terapias holísticas e espiritualidade",
+        search: "Terapias holísticas e espiritualidade"
+    },
+    {
+        label: "Fotografia e organização de eventos (buffet, cerimoninal)",
+        value: "Fotografia e organização de eventos (buffet, cerimoninal)",
+        search: "Fotografia e organização de eventos (buffet, cerimoninal)"
+    },
+    {
+        label: "Aluguel (apartamento, quarto, escritório)",
+        value: "Aluguel (apartamento, quarto, escritório)",
+        search: "Aluguel (apartamento, quarto, escritório)"
     },
     {
         label: "Outros",
